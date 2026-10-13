@@ -1,0 +1,10 @@
+# leadgen engine — runtime dependencies (open-source stack)
+# Install:  pip install -r requirements.txt
+# The backend platform has its own: backend/requirements.txt
+
+requests>=2.31        # all outbound HTTP (audited, SSRF-guarded)
+pandas>=2.0           # leads.csv export (engine falls back to stdlib csv)
+
+# Optional but recommended: correct E.164 phone normalization when
+# NUMVERIFY_API_KEY is not configured (offline fallback path).
+phonenumbers>=8.13

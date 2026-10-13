@@ -1,0 +1,37 @@
+# LocalLead Intelligence reverse proxy — HTTPS variant.
+# Copy to nginx.conf (or mount over it) after placing certificates:
+#   infrastructure/nginx/certs/fullchain.pem
+#   infrastructure/nginx/certs/privkey.pem
+# Recommended: Let's Encrypt via certbot; see docs/deployment.md.
+
+limit_req_zone $binary_remote_addr zone=api_limit:10m rate=30r/s;
+
+# Docker's embedded DNS resolver: re-resolve service names at runtime so a
+# recreated API/frontend container never leaves nginx proxying to a stale IP.
+resolver 127.0.0.11 valid=10s ipv6=off;
+
+server {
+    listen 8080;
+    server_name _;
+    # Redirect all HTTP traffic to HTTPS once certificates are live:
+    return 301 https://$host:8443$request_uri;
+}
+server {
+    listen 8443 ssl;
+    http2 on;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+
+    # HSTS belongs ONLY on the HTTPS server (never on the HTTP dev entrypoint).
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+
+    # Variables force per-request resolution via the resolver above.
+    set $api_upstream api:8000;
+    set $frontend_upstream frontend:3000;
+
+    include /etc/nginx/locallead_proxy_params.conf;
+}

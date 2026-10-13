@@ -1,0 +1,42 @@
+# Virtual environments & node dependencies
+backend/.venv/
+venv/
+env/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Python cache & build
+__pycache__/
+*.py[cod]
+
+# Testing & linters
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local databases, scratch & runtime outputs
+backend/data/
+data/
+output/
+scratch/
+*.db
+*.sqlite3
+
+# Environment & secrets
+.env
+!.env.example
+
+# SSL keys & certs
+infrastructure/nginx/certs/*.pem
+infrastructure/nginx/certs/*.key
+
+# OS & editors
+.DS_Store
+Thumbs.db
+.freebuff/
+.idea/
+.vscode/
+*.log

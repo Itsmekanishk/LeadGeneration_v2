@@ -1,0 +1,63 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Testing / tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.turbo/
+
+# Local data & exports
+backend/data/*
+!backend/data/reports/.gitkeep
+data/
+output/
+scratch/
+*.sqlite3
+*.db
+
+# Backups
+*.bak
+
+# SSL certificates and private keys
+*.pem
+*.key
+*.crt
+*.csr
+infrastructure/nginx/certs/*
+!infrastructure/nginx/certs/.gitkeep
+infrastructure/certbot/www/*
+!infrastructure/certbot/www/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / tooling workspace metadata
+.freebuff/
+.idea/
+.vscode/
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   LocalLead Intelligence — merged global styles.
+   Light shadcn vars are BRIDGED to the LocalLead dark theme (canvas #080C14):
+   legacy components resolving against these vars recolor automatically, so
+   there is exactly one token system at runtime. The design-system palette
+   itself lives in tailwind.config.ts under the `ll-` prefix.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* dark bridge — HSL components consumed via hsl(var(--x)) */
+    --background: 220 43% 5%;            /* canvas #080C14 */
+    --foreground: 214 32% 91%;           /* slate-200 #E2E8F0 */
+    --card: 222 38% 8%;                  /* surface #0D111D */
+    --card-foreground: 214 32% 91%;
+    --primary: 239 84% 67%;              /* indigo #6366F1 */
+    --primary-foreground: 0 0% 100%;
+    --muted: 222 30% 12%;                /* slightly lighter than surface */
+    --muted-foreground: 215 20% 65%;     /* slate-400 */
+    --destructive: 350 89% 60%;          /* confidence-low #F43F5E */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 14% 16%;               /* ≈ white/8% composited on canvas */
+    --input: 220 14% 16%;
+    --ring: 239 84% 67%;                 /* indigo */
+    --radius: 0.5rem;
+
+    /* design-system font variables (loaded by app/layout.tsx via next/font) */
+    --font-sans: var(--font-inter);
+    --font-mono: var(--font-jetbrains-mono);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    /* design-system page gradient — this project had no page background of
+       its own beyond the flat light token, so it is adopted here */
+    background:
+      radial-gradient(120% 100% at 20% -10%, rgba(99, 102, 241, 0.08), transparent 60%),
+      radial-gradient(100% 80% at 100% 0%, rgba(6, 182, 212, 0.06), transparent 55%),
+      #080c14;
+    @apply text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+}
+
+/* Visible keyboard focus everywhere — never suppressed.
+   (Reconciled with the legacy .btn/.input focus-visible ring rules below:
+   those keep their ring-2 ring-ring utility, which now resolves to the same
+   indigo; this global covers every other interactive element.) */
+:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.35);
+}
+
+/* Thin, quiet scrollbars that match the obsidian surface */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+  background-clip: padding-box;
+}
+
+/* Tailwind ships a built-in `tabular-nums` utility — the design system's
+   custom CSS class is intentionally NOT duplicated here. */
+
+/* Respect reduced-motion preferences (framer-motion animations also gate on
+   this via the useReducedMotion-aware components; this covers CSS ones) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  /* legacy utility classes — kept for the pages still composing them;
+     they resolve against the bridged dark tokens above */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground hover:opacity-90 h-10 px-4;
+  }
+  .btn-outline {
+    @apply btn border border-input bg-card hover:bg-muted h-10 px-4;
+  }
+  .btn-ghost {
+    @apply btn hover:bg-muted h-9 px-3;
+  }
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-card px-3 py-2 text-sm
+      placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+  .card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold;
+  }
+  .label {
+    @apply text-sm font-medium text-foreground mb-1.5 block;
+  }
+  .skeleton {
+    @apply animate-pulse rounded-md bg-muted;
+  }
+}
